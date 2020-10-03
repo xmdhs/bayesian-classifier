@@ -25,7 +25,6 @@ type Classifier struct {
 type data struct {
 	Categorys map[string]float64            `json:"category"` // 分类数据
 	Words     map[string]map[string]float64 `json:"words"`    // 单词数据
-	Docs      map[string]bool               `json:"docs"`     // 文档数据
 }
 
 // NewClassifier 实例化一个分类器
@@ -41,7 +40,6 @@ func NewClassifier(config map[string]interface{}) *Classifier {
 	t.data = new(data)
 	t.data.Categorys = make(map[string]float64)
 	t.data.Words = make(map[string]map[string]float64)
-	t.data.Docs = make(map[string]bool)
 
 	// 初始化存储器
 	var err error
@@ -99,19 +97,40 @@ func (t *Classifier) Training(doc, category string) {
 		log.Println("提供了空文档")
 		return
 	}
-	// 判断是否是重复文档
-	docHash := util.MD5(doc)
-	var ok bool
-	if _, ok = t.data.Docs[docHash]; ok {
-		log.Println("文档已学习过")
-		return
-	}
-	t.data.Docs[docHash] = true
 
 	// 更新单词数据
 	// 同一个文档中单词出现多次，仅记录一次
 	fwords := make(map[string]bool)
 	words := t.segmenter.Segment(doc)
+	for _, word := range words {
+		if _, ok := fwords[word]; ok {
+			continue
+		}
+		fwords[word] = true
+		if _, ok := t.data.Words[word]; !ok {
+			t.data.Words[word] = make(map[string]float64)
+		}
+		t.data.Words[word][category]++
+		log.Println("单词训练：", word)
+	}
+	// 更新分类统计
+	t.data.Categorys[category]++
+
+	return
+}
+
+func (t *Classifier) TrainingwithSlash(doc, category string) {
+	doc = strings.TrimSpace(doc)
+	category = strings.TrimSpace(category)
+	if doc == "" || category == "" {
+		log.Println("提供了空文档")
+		return
+	}
+
+	// 更新单词数据
+	// 同一个文档中单词出现多次，仅记录一次
+	fwords := make(map[string]bool)
+	words := strings.Split(doc, "/")
 	for _, word := range words {
 		if _, ok := fwords[word]; ok {
 			continue
