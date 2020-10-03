@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/safeie/bayesian-classifier/util"
+	"github.com/xmdhs/bayesian-classifier/util"
 )
 
 // HTTP 提供了HTTP接口的结构体

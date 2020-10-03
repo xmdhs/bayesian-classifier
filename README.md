@@ -49,7 +49,7 @@ go get - u github.com/huichen/sego
 获取：
 
 ```
-go get -u github.com/safeie/bayesian-classifier
+go get -u github.com/xmdhs/bayesian-classifier
 ```
 
 测试：
@@ -58,7 +58,7 @@ go get -u github.com/safeie/bayesian-classifier
 package main
 
 import (
-	"github.com/safeie/bayesian-classifier/classifier"
+	"github.com/xmdhs/bayesian-classifier/classifier"
 	"fmt"
 )
 

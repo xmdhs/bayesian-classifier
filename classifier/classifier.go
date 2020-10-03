@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/safeie/bayesian-classifier/storage"
-	"github.com/safeie/bayesian-classifier/util"
+	"github.com/xmdhs/bayesian-classifier/storage"
+	"github.com/xmdhs/bayesian-classifier/util"
 )
 
 // Classifier is a bayesian classifier, provide training score categorize methods and http api.

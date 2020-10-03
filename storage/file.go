@@ -3,9 +3,10 @@ package storage
 import (
 	"encoding/json"
 	"errors"
-	"github.com/safeie/bayesian-classifier/util"
 	"io/ioutil"
 	"path/filepath"
+
+	"github.com/xmdhs/bayesian-classifier/util"
 )
 
 type FileStorage struct {

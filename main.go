@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/safeie/bayesian-classifier/classifier"
+	"github.com/xmdhs/bayesian-classifier/classifier"
 )
 
 const (

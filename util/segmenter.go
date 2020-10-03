@@ -1,26 +1,22 @@
 package util
 
 import (
-	"github.com/huichen/sego"
 	"strings"
+
+	"github.com/yanyiwu/gojieba"
 )
 
 type Segmenter struct {
-	segmenter sego.Segmenter
+	segmenter *gojieba.Jieba
 }
 
 func NewSegmenter() *Segmenter {
-	client := new(Segmenter)
-	// 载入词典
-	dir := GetDir()
-	client.segmenter.LoadDictionary(dir + "/../../huichen/sego/data/dictionary.txt")
-	return client
+	return &Segmenter{segmenter: gojieba.NewJieba(`dict/jieba.dict.utf8`, `dict/hmm_model.utf8`, `dict/user.dict.utf8`, `dict/idf.utf8`, `dict/stop_words.utf8`)}
 }
 
 // 分词
 func (t *Segmenter) Segment(text string) []string {
-	segments := t.segmenter.Segment([]byte(text))
-	output := sego.SegmentsToSlice(segments, false)
+	output := t.segmenter.CutForSearch(text, true)
 	return filterWord(output)
 }
 

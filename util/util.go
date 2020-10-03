@@ -9,7 +9,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"syscall"
 )
 
 // 执行系统命令并返回结果
@@ -52,15 +51,14 @@ func IsExist(path string) bool {
 // 判断一个文件或目录是否有写入权限
 // 可写时返回 true, 不可写返回 false
 func IsWritable(path string) bool {
-	err := syscall.Access(path, syscall.O_RDWR)
-	if err == nil {
-		return true
+	file, err := os.OpenFile(path, os.O_WRONLY, 0666)
+	defer file.Close()
+	if err != nil {
+		if os.IsPermission(err) {
+			return false
+		}
 	}
-	// Check if error is "no such file or directory"
-	if _, ok := err.(*os.PathError); ok {
-		return false
-	}
-	return false
+	return true
 }
 
 // 读取一个文件夹返回文件列表
