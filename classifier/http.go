@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/xmdhs/bayesian-classifier/util"
 )
@@ -42,7 +43,8 @@ func (t *HTTP) Start() {
 	http.HandleFunc("/api/train", t.handleTrain)
 	http.HandleFunc("/api/score", t.handleScore)
 	http.HandleFunc("/api/categorize", t.handleGategorize)
-	log.Fatal(http.ListenAndServe(t.port, nil))
+	server := http.Server{ReadTimeout: 5 * time.Second, WriteTimeout: 10 * time.Second, Addr: t.port}
+	log.Fatal(server.ListenAndServe())
 }
 
 func (t *HTTP) handleIndex(w http.ResponseWriter, r *http.Request) {
