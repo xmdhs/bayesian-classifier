@@ -113,7 +113,9 @@ func (t *Classifier) Training(doc, category string) {
 			t.data.Words[word] = make(map[string]float64)
 		}
 		t.data.Words[word][category]++
-		log.Println("单词训练：", word)
+		if t.debug {
+			log.Println("单词训练：", word)
+		}
 	}
 	// 更新分类统计
 	t.data.Categorys[category]++
@@ -142,7 +144,9 @@ func (t *Classifier) TrainingwithSlash(doc, category string) {
 			t.data.Words[word] = make(map[string]float64)
 		}
 		t.data.Words[word][category]++
-		log.Println("单词训练：", word)
+		if t.debug {
+			log.Println("单词训练：", word)
+		}
 	}
 	// 更新分类统计
 	t.data.Categorys[category]++
