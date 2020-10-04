@@ -69,7 +69,9 @@ func NewClassifier(config map[string]interface{}) *Classifier {
 					log.Println("自动保存数据失败：", err)
 					runtime.Goexit()
 				}
-				log.Println("自动保存数据成功")
+				if t.debug {
+					log.Println("自动保存数据成功")
+				}
 			}
 		}()
 	}
