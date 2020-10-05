@@ -204,18 +204,18 @@ func (t *Classifier) wordWeightProb(word, category string, weight, assumedprob f
 func (t *Classifier) Categorize(doc string) []*ScoreItem {
 	scores := NewScores()
 	total := t.categoryNumTotal()
+	words := t.segmenter.Segment(doc)
 	for cate := range t.data.Categorys {
-		scores.Append(cate, t.docProb(doc, cate)*t.data.Categorys[cate]/total)
+		scores.Append(cate, t.docProb(words, cate)*t.data.Categorys[cate]/total)
 	}
 	return scores.Top(10)
 }
 
 // docProb 整篇文档的概率计算
 // P(document|category) = P(word1|category) * P(word2|category) ...
-func (t *Classifier) docProb(doc, category string) float64 {
+func (t *Classifier) docProb(words []string, category string) float64 {
 	prob := 1.0
 	// 分词，获取逐个单词指定分类的概率
-	words := t.segmenter.Segment(doc)
 	for _, word := range words {
 		wp := t.wordWeightProb(word, category, t.defaultWeight, t.defaultProb)
 		prob *= wp
