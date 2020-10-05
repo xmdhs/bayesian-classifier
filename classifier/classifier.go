@@ -3,10 +3,7 @@ package classifier
 
 import (
 	"log"
-	"runtime"
-	"strconv"
 	"strings"
-	"time"
 
 	"github.com/xmdhs/bayesian-classifier/storage"
 	"github.com/xmdhs/bayesian-classifier/util"
@@ -55,26 +52,6 @@ func NewClassifier(config map[string]interface{}) *Classifier {
 	// 加载数据
 	log.Println("加载数据", storageConfig["path"])
 	t.Import()
-
-	// 自动保存数据
-	frequency, _ := strconv.Atoi(storageConfig["frequency"])
-	if frequency > 0 {
-		log.Println("开启自动数据自动保存")
-		go func() {
-			var err error
-			for {
-				time.Sleep(time.Second * time.Duration(frequency))
-				err = t.Export()
-				if err != nil {
-					log.Println("自动保存数据失败：", err)
-					runtime.Goexit()
-				}
-				if t.debug {
-					log.Println("自动保存数据成功")
-				}
-			}
-		}()
-	}
 
 	// 初始化HTTP服务
 	enableHTTP := config["http"].(bool)
